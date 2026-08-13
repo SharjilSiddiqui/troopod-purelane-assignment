@@ -1,0 +1,300 @@
+<section
+  id="combos"
+  class="purelane-section pl-combos"
+>
+  <div class="purelane-wrap">
+
+    <header class="pl-section-head">
+      <span class="pl-kicker">
+        {{ section.settings.kicker | escape }}
+      </span>
+
+      <h2 class="pl-heading pl-heading--section">
+        {{ section.settings.heading | escape }}
+      </h2>
+
+      <div class="pl-rule" aria-hidden="true">
+        <i></i>
+        {% render 'purelane-leaf-icon' %}
+        <i></i>
+      </div>
+
+      {% if section.settings.description != blank %}
+        <p class="pl-lede">
+          {{ section.settings.description }}
+        </p>
+      {% endif %}
+    </header>
+
+    <div class="pl-combos__rail">
+      {% for block in section.blocks %}
+        <article
+          class="pl-glass pl-combo{% if block.settings.featured %} pl-combo--featured{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          <div class="pl-combo__visual">
+
+            {% if block.settings.save_label != blank %}
+              <span class="pl-combo__save">
+                {{ block.settings.save_label | escape }}
+              </span>
+            {% endif %}
+
+            {% if block.settings.flag != blank %}
+              <span class="pl-combo__flag">
+                {{ block.settings.flag | escape }}
+              </span>
+            {% endif %}
+
+            <div class="pl-combo__products">
+              {% for product in block.settings.products limit: 5 %}
+                <div class="pl-combo__product">
+                  {% if product.featured_image %}
+                    {{
+                      product.featured_image
+                      | image_url: width: 300
+                      | image_tag:
+                        class: 'pl-combo__product-image',
+                        loading: 'lazy',
+                        widths: '120,180,240,300',
+                        sizes: '80px',
+                        alt: product.title
+                    }}
+                  {% else %}
+                    <div
+                      class="pl-combo__product-image"
+                      aria-label="{{ product.title | escape }}"
+                    ></div>
+                  {% endif %}
+
+                  {% if block.settings.show_product_names %}
+                    <span class="pl-combo__product-name">
+                      {{ product.title | escape }}
+                    </span>
+                  {% endif %}
+                </div>
+
+                {% unless forloop.last %}
+                  <span class="pl-combo__plus" aria-hidden="true">+</span>
+                {% endunless %}
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="pl-combo__body">
+            <h3 class="pl-combo__title">
+              {{ block.settings.title | escape }}
+            </h3>
+
+            <div class="pl-combo__count">
+              {{ block.settings.products.size }} products
+            </div>
+
+            {% if block.settings.description != blank %}
+              <p class="pl-combo__description">
+                {{ block.settings.description }}
+              </p>
+            {% endif %}
+
+            <div class="pl-combo__price">
+              <strong>
+                {{ block.settings.bundle_price | money }}
+              </strong>
+
+              {% if block.settings.compare_price > block.settings.bundle_price %}
+                <s>{{ block.settings.compare_price | money }}</s>
+              {% endif %}
+
+              {% if block.settings.saving_text != blank %}
+                <em class="pl-combo__saving">
+                  {{ block.settings.saving_text | escape }}
+                </em>
+              {% endif %}
+            </div>
+
+            <div class="pl-combo__fine">
+              {{ block.settings.fine_print | escape }}
+            </div>
+
+            {% if block.settings.button_label != blank %}
+              <a
+                class="pl-button {% if block.settings.featured %}pl-button--primary{% else %}pl-button--ghost{% endif %}"
+                href="{{ block.settings.button_link | default: '#bundles' }}"
+              >
+                {{ block.settings.button_label | escape }}
+              </a>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    {% if section.settings.show_swipe_hint %}
+      <div
+        style="text-align:center; margin-top:2px; color:var(--pl-muted-light); font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;"
+      >
+        Swipe for more combos
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Purelane combos",
+  "tag": "section",
+  "class": "purelane-combos-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Pre-built to save you money"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Best selling combos"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_swipe_hint",
+      "label": "Show swipe hint",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "combo",
+      "name": "Combo",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Kitchen essentials"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Products",
+          "limit": 5
+        },
+        {
+          "type": "number",
+          "id": "bundle_price",
+          "label": "Bundle price",
+          "default": 499
+        },
+        {
+          "type": "number",
+          "id": "compare_price",
+          "label": "Compare-at price",
+          "default": 897
+        },
+        {
+          "type": "text",
+          "id": "saving_text",
+          "label": "Saving text",
+          "default": "Save ₹398"
+        },
+        {
+          "type": "text",
+          "id": "save_label",
+          "label": "Save label",
+          "default": "You save ₹398"
+        },
+        {
+          "type": "text",
+          "id": "flag",
+          "label": "Featured flag",
+          "default": "Most popular"
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Featured combo",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_product_names",
+          "label": "Show product names",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Includes your most-loved homecare essentials in one convenient box."
+        },
+        {
+          "type": "text",
+          "id": "fine_print",
+          "label": "Fine print",
+          "default": "Inclusive of all taxes · COD available"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button",
+          "default": "Shop bundle"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane combos",
+      "blocks": [
+        {
+          "type": "combo",
+          "settings": {
+            "title": "Kitchen essentials",
+            "featured": true,
+            "flag": "Most popular",
+            "save_label": "You save ₹398",
+            "bundle_price": 499,
+            "compare_price": 897,
+            "saving_text": "Save ₹398"
+          }
+        },
+        {
+          "type": "combo",
+          "settings": {
+            "title": "Laundry care bundle",
+            "save_label": "You save ₹448",
+            "bundle_price": 499,
+            "compare_price": 947,
+            "saving_text": "Save ₹448"
+          }
+        },
+        {
+          "type": "combo",
+          "settings": {
+            "title": "Complete home bundle",
+            "save_label": "Biggest saving",
+            "flag": "Best value",
+            "bundle_price": 799,
+            "compare_price": 1495,
+            "saving_text": "Save ₹696"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

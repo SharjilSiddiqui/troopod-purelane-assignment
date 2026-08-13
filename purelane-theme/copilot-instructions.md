@@ -1,0 +1,1 @@
+/Users/sharjil/troopod assignment/purelane-theme/AGENTS.md
