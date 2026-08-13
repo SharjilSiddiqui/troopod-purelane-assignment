@@ -1271,3 +1271,10 @@
     transition: none;
   }
 }
+
+/* DEBUG: force reveal animations visible */
+.rv {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
