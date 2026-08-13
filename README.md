@@ -11,7 +11,7 @@ The implementation preserves the original visual direction, responsive structure
 ### Dev Store
 
 **Store:**  
-https://purelane-zi5kfj.myshopify.com
+https://purelane-zi5kjafj.myshopify.com/
 
 **Storefront password:**  
 `yaighu`
